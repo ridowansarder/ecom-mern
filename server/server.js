@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(
   cors({
     origin:
-      process.env.CLIENT_URL || "https://ecommerce-mern-482l.onrender.com",
+      process.env.CLIENT_URL,
     credentials: true,
   })
 );
