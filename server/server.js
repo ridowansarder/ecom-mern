@@ -3,14 +3,11 @@ import express from "express";
 import "dotenv/config";
 import connectDB from "./configs/db.js";
 import cors from "cors";
-import Path from "path";
 
 // Init express
 const app = express();
 // Init port
 const port = process.env.PORT || 5000;
-
-const __dirname = Path.resolve();
 
 // Middlewares
 app.use(express.json({ limit: "50mb" }));
@@ -37,19 +34,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/payments", paymentRouter);
 app.use("/api/analytics", analyticRouter);
 
-if (process.env.NODE_ENV === "production") {
-  const clientDist = Path.join(__dirname, "client", "dist");
-
-  // Serve static assets
-  app.use(express.static(clientDist));
-
-  // SPA fallback
-  app.use((req, res) => {
-    res.sendFile(Path.join(clientDist, "index.html"));
-  });
-}
-
 // Start server
-app.listen(port, () => console.log(`Server started on port ${port}`));
-
-connectDB();
+connectDB().then(() => {
+  app.listen(port, () => console.log(`Server started on port ${port}`));
+})
